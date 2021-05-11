@@ -2,7 +2,10 @@
 	import Waveform from './Waveform.svelte';
 	let wavesurfer;
 
-	const audioUrl = 'https://partials-music.s3.amazonaws.com/recordings/pawelek.mp3';
+	export let audioFileName: string;
+
+	const audioUrlPrefix = 'https://partials-music.s3.amazonaws.com/recordings/';
+	$: audioUrl = audioUrlPrefix + audioFileName;
 
 	let isPlaying = false;
 

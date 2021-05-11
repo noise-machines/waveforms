@@ -8,7 +8,6 @@
 	let container: HTMLElement;
 
 	let loadingProgress = 0;
-	$: isLoaded = loadingProgress >= 100;
 	let state: 'loading' | 'drawing' | 'ready';
 
 	onMount(async () => {
@@ -18,7 +17,9 @@
 
 		wavesurfer = WaveSurfer.create({
 			container,
-			scrollParent: true
+			scrollParent: true,
+			normalize: true,
+			partialRender: true
 		});
 
 		wavesurfer.on('loading', (currentProgress) => {
