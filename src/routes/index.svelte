@@ -1,5 +1,1 @@
-<script lang="typescript">
-	import AudioPlayer from '../components/AudioPlayer.svelte';
-</script>
-
-<AudioPlayer audioFileName="pawelek.mp3" />
+<h1>This is our waveform player</h1>
