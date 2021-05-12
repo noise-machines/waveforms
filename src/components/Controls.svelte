@@ -5,7 +5,7 @@
 </script>
 
 {#if $player.loaded}
-	<div class="icon-container">
+	<div class="iconContainer">
 		{#if $player.state === 'playing'}
 			<PauseIcon on:click={player.togglePlaying} />
 		{:else}
@@ -15,8 +15,13 @@
 {/if}
 
 <style>
-	:global(.icon-container .icon) {
-		width: 128px;
-		height: 128px;
+	.iconContainer {
+		display: flex;
+		align-items: center;
+	}
+
+	:global(.iconContainer .icon) {
+		width: 64px;
+		height: 64px;
 	}
 </style>
