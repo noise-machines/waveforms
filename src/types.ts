@@ -8,4 +8,5 @@ export interface AudioFile {
 export interface AudioPlayer {
 	state: PlayerState
 	loadingProgress: number
+	loaded: boolean
 }

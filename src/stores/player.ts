@@ -1,8 +1,14 @@
 import { writable, Writable, get } from 'svelte/store'
-import type { AudioPlayer } from '../types'
+import { AudioPlayer } from '../types'
 import audioFile from './audioFile'
+import { mid, dark } from '../colors'
 
-const player: Writable<AudioPlayer> = writable({ state: 'loading', loadingProgress: 0 })
+const player: Writable<AudioPlayer> = writable({
+	state: 'loading',
+	loadingProgress: 0,
+	loaded: false
+})
+
 let wavesurfer
 
 function updatePlayer (updates: Partial<AudioPlayer>) {
@@ -24,8 +30,8 @@ async function setContainer (container: HTMLElement): Promise<void> {
 		normalize: true,
 		partialRender: true,
 		autoCenter: false,
-		progressColor: 'hsl(42, 8%, 20%)',
-		waveColor: 'hsl(45, 2%, 52%)'
+		progressColor: dark,
+		waveColor: mid
 	})
 
 	wavesurfer.on('loading', (loadingProgress: number) => {
@@ -39,7 +45,7 @@ async function setContainer (container: HTMLElement): Promise<void> {
 	})
 
 	wavesurfer.on('ready', () => {
-		updatePlayer({ state: 'paused' })
+		updatePlayer({ state: 'paused', loaded: true })
 	})
 
 	wavesurfer.on('pause', () => {

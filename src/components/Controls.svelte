@@ -1,8 +1,22 @@
 <script lang="typescript">
-	import PlayPauseButton from './PlayPauseButton.svelte';
+	import PlayIcon from './icons/Play.svelte';
+	import PauseIcon from './icons/Pause.svelte';
 	import player from '../stores/player';
 </script>
 
-{#if $player.state === 'paused' || $player.state === 'playing'}
-	<PlayPauseButton playing={$player.state === 'playing'} on:click={player.togglePlaying} />
+{#if $player.loaded}
+	<div class="icon-container">
+		{#if $player.state === 'playing'}
+			<PauseIcon on:click={player.togglePlaying} />
+		{:else}
+			<PlayIcon on:click={player.togglePlaying} />
+		{/if}
+	</div>
 {/if}
+
+<style>
+	:global(.icon-container .icon) {
+		width: 128px;
+		height: 128px;
+	}
+</style>

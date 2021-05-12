@@ -9,13 +9,7 @@
 	});
 </script>
 
-{#if $player.state === 'loading'}
-	Loading: {$player.loadingProgress}%
-{:else if $player.state === 'drawing'}
-	Drawing
-{/if}
-
-<div class="container" bind:this={container} />
+<div class="container" bind:this={container} class:loading={!$player.loaded} />
 
 <style>
 	.container {
@@ -25,5 +19,9 @@
 
 	:global(.container wave) {
 		width: 100%;
+	}
+
+	.loading {
+		display: none;
 	}
 </style>
