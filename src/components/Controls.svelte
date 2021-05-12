@@ -18,6 +18,7 @@
 	.iconContainer {
 		display: flex;
 		align-items: center;
+		margin-right: 16px;
 	}
 
 	:global(.iconContainer .icon) {
