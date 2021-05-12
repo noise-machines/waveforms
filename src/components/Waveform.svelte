@@ -1,49 +1,29 @@
 <script lang="typescript">
 	import { onMount } from 'svelte';
+	import player from '../stores/player';
 
-	export let wavesurfer;
-	export let audioUrl: string;
-
-	let WaveSurfer;
 	let container: HTMLElement;
 
-	let loadingProgress = 0;
-	let state: 'loading' | 'drawing' | 'ready';
-
 	onMount(async () => {
-		console.log(audioUrl);
-		const waveSurferImport = await import('wavesurfer.js');
-		WaveSurfer = waveSurferImport.default;
-
-		wavesurfer = WaveSurfer.create({
-			container,
-			scrollParent: true,
-			normalize: true,
-			partialRender: true
-		});
-
-		wavesurfer.on('loading', (currentProgress) => {
-			loadingProgress = currentProgress;
-
-			if (loadingProgress < 100) {
-				state = 'loading';
-			} else {
-				state = 'drawing';
-			}
-		});
-
-		wavesurfer.on('ready', () => {
-			state = 'ready';
-		});
-
-		wavesurfer.load(audioUrl);
+		player.setContainer(container);
 	});
 </script>
 
-{#if state === 'loading'}
-	Loading: {loadingProgress}%
-{:else if state === 'drawing'}
+{#if $player.state === 'loading'}
+	Loading: {$player.loadingProgress}%
+{:else if $player.state === 'drawing'}
 	Drawing
 {/if}
 
 <div class="container" bind:this={container} />
+
+<style>
+	.container {
+		display: flex;
+		align-items: center;
+	}
+
+	:global(.container wave) {
+		width: 100%;
+	}
+</style>

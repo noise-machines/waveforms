@@ -1,6 +1,9 @@
 <script lang="typescript">
-	import { page } from '$app/stores';
 	import AudioPlayer from '../../components/AudioPlayer.svelte';
+	import { page } from '$app/stores';
+	import { setName } from '../../stores/audioFile';
+
+	$: setName($page.params.fileName);
 </script>
 
-<AudioPlayer audioFileName={$page.params.fileName} />
+<AudioPlayer />
