@@ -14,7 +14,7 @@
 
 <style>
 	.loading {
-		font-size: 128px;
+		font-size: 14vw;
 		text-transform: uppercase;
 	}
 </style>
