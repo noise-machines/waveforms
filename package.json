@@ -26,6 +26,7 @@
   },
   "type": "module",
   "dependencies": {
+    "localforage": "^1.9.0",
     "wavesurfer.js": "^5.0.1"
   }
 }

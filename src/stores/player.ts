@@ -2,6 +2,7 @@ import { writable, Writable, get } from 'svelte/store'
 import { AudioPlayer } from '../types'
 import audioFile from './audioFile'
 import { mid, dark } from '../colors'
+import { hasSavedAudio, saveAudioBuffer } from '../storage'
 
 const player: Writable<AudioPlayer> = writable({
 	state: 'loading',
@@ -24,6 +25,9 @@ async function setContainer (container: HTMLElement): Promise<void> {
 	const waveSurferImport = await import('wavesurfer.js')
 	const WaveSurfer = waveSurferImport.default
 
+	const playheadImport = await import('wavesurfer.js/dist/plugin/wavesurfer.playhead')
+	const playhead = playheadImport.default
+
 	wavesurfer = WaveSurfer.create({
 		container,
 		scrollParent: true,
@@ -31,7 +35,14 @@ async function setContainer (container: HTMLElement): Promise<void> {
 		partialRender: true,
 		autoCenter: false,
 		progressColor: dark,
-		waveColor: mid
+		waveColor: mid,
+		plugins: [
+			playhead.create({
+				returnOnPause: true,
+				moveOnSeek: true,
+				draw: false
+			})
+		]
 	})
 
 	wavesurfer.on('loading', (loadingProgress: number) => {
@@ -44,7 +55,13 @@ async function setContainer (container: HTMLElement): Promise<void> {
 		}
 	})
 
-	wavesurfer.on('ready', () => {
+	wavesurfer.on('ready', async () => {
+		const alreadySaved = await hasSavedAudio()
+
+		if (!alreadySaved) {
+			await saveAudioBuffer(wavesurfer.backend.buffer)
+		}
+
 		updatePlayer({ state: 'paused', loaded: true })
 	})
 
@@ -56,9 +73,17 @@ async function setContainer (container: HTMLElement): Promise<void> {
 		updatePlayer({ state: 'playing' })
 	})
 
-	const $audioFile = get(audioFile)
-	wavesurfer.load($audioFile.url)
+	loadAudioFileUrl()
 }
+
+function loadAudioFileUrl () {
+	const $audioFile = get(audioFile)
+	if (wavesurfer && $audioFile.url) {
+		wavesurfer.load($audioFile.url)
+	}
+}
+
+audioFile.subscribe(loadAudioFileUrl)
 
 function togglePlaying (): void {
 	if (wavesurfer) {
